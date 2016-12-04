@@ -3,6 +3,7 @@
 from read_data import load_data, generate_test_data
 from objectTypes import Player, Match
 from Perceptron import Perceptron
+from AdaBoost import AdaBoost
 
 import os
 import argparse
@@ -10,20 +11,19 @@ import sys
 import pickle
 
 def load_instances():
-	matches = load_data(1000)
-	training_examples = []
-	training_labels = []
-	for match in matches:
-		fv = match.get_feature_vector()
-		training_examples.append(fv)
-		label = match.get_label()
-		if label == 0:
-			label = -1
-		else:
-			label = 1
-		training_labels.append(label)
-
-	return (training_examples, training_labels)
+    matches = load_data(1000)
+    training_examples = []
+    training_labels = []
+    for match in matches:
+        fv = match.get_feature_vector()
+        training_examples.append(fv)
+        label = match.get_label()
+        if label == 0:
+            label = -1
+        else:
+            label = 1
+        training_labels.append(label)
+    return (training_examples, training_labels)
 
 def get_args():
     parser = argparse.ArgumentParser(description="This is the main test harness for your algorithms.")
@@ -39,26 +39,26 @@ def get_args():
 
 
 def train(instances):
-	p = Perceptron()
-	training_examples = instances[0]
-	training_labels = instances[1]
-	p = p.train(training_examples, training_labels)
-	return p
+    p = AdaBoost(2)
+    training_examples = instances[0]
+    training_labels = instances[1]
+    p = p.train(training_examples, training_labels)
+    return p
 
 
 def write_predictions(predictor, instances, predictions_file):
     try:
         with open(predictions_file, 'w') as writer:
-        	with open("label_file",'w') as writer2:
-	            for instance in instances:
-	            	testing_example = instance.get_feature_vector()
-	            	correct_label = instance.get_label()
-	                label = predictor.predict(testing_example)
-	        
-	                writer.write(str(label))
-	                writer.write('\n')
-	                writer2.write(str(correct_label))
-	                writer2.write('\n')
+            with open("label_file",'w') as writer2:
+                for instance in instances:
+                    testing_example = instance.get_feature_vector()
+                    correct_label = instance.get_label()
+                    label = predictor.predict(testing_example)
+            
+                    writer.write(str(label))
+                    writer.write('\n')
+                    writer2.write(str(correct_label))
+                    writer2.write('\n')
     except IOError:
         raise Exception("Exception while opening/writing file for writing predicted labels: " + predictions_file)
 
@@ -82,7 +82,7 @@ def main():
             
     elif args.mode.lower() == "test":
         # Load the test data. Only want the feature vector this time.
-        instances = generate_test_data(1001, 50)
+        instances = generate_test_data(10001, 200)
 
         predictor = None
         # Load the model.
