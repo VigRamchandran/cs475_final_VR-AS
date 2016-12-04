@@ -36,7 +36,7 @@ def load_data(number_of_training_matches=1000):
 		# initialize matches
 		match = Match(players)
 		match._match_id = match_data["match_id"][i]
-		match._tower_status_radiant = "{0:b}".format(match_data["tower_status_radiant"][i]).zfill(16)
+		match._tower_status_radiant = "{0:b}".format(match_data["tower_status_radiant"][i]).zfill(16) # convert int to bit string and zero pad
 		match._tower_status_dire = "{0:b}".format(match_data["tower_status_dire"][i]).zfill(16)
 		match._barracks_status_radiant = "{0:b}".format(match_data["barracks_status_radiant"][i]).zfill(8)
 		match._barracks_status_dire = "{0:b}".format(match_data["barracks_status_dire"][i]).zfill(8)
@@ -47,7 +47,7 @@ def load_data(number_of_training_matches=1000):
 	return matches
 
 
-def generate_test_data(start=1001, number_of_points=50):
+def generate_test_data(start=1001, number_of_points=50): # returns test Match objects
 
 	path = "dota-2-matches/"
 

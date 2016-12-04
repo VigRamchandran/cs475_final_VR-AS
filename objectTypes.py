@@ -19,9 +19,9 @@ class Match:
 	def __init__(self, players):
 		self._players = players
 		self._match_id = 0
-		self._tower_status_radiant = 0
+		self._tower_status_radiant = 0 #will be a 16-bit array
 		self._tower_status_dire = 0
-		self._barracks_status_radiant = 0
+		self._barracks_status_radiant = 0 #will be an 8-bit array
 		self._barracks_status_dire = 0
 		self._label = 0
 
@@ -68,7 +68,7 @@ class Match:
 	def get_label(self):
 		return int(self._label)
 
-	def bit2arr(self, bit_str):
+	def bit2arr(self, bit_str): # converts a bit string to an array. 
 		arr = (",").join(bit_str).split(",")
 		for i in range(len(arr)):
 			arr[i] = int(arr[i])
