@@ -10,12 +10,12 @@ import argparse
 import sys
 import pickle
 
-def load_instances():
+def load_instances(case):
     matches = load_data(1000)
     training_examples = []
     training_labels = []
     for match in matches:
-        fv = match.get_feature_vector()
+        fv = match.get_feature_vector(case)
         training_examples.append(fv)
         label = match.get_label()
         if label == 0:
@@ -49,12 +49,12 @@ def train(instances, alg):
     return p
 
 
-def write_predictions(predictor, instances, predictions_file):
+def write_predictions(predictor, instances, predictions_file, case):
     try:
         with open(predictions_file, 'w') as writer:
             with open("label_file",'w') as writer2:
                 for instance in instances:
-                    testing_example = instance.get_feature_vector()
+                    testing_example = instance.get_feature_vector(case)
                     correct_label = instance.get_label()
                     label = predictor.predict(testing_example)
             
@@ -68,10 +68,10 @@ def write_predictions(predictor, instances, predictions_file):
 
 def main():
     args = get_args()
-
+    case = 2
     if args.mode.lower() == "train":
         # Load the training data.
-        instances = load_instances()
+        instances = load_instances(case)
 
         # Train the model.
         predictor = train(instances,args.alg)
@@ -97,7 +97,7 @@ def main():
         except pickle.PickleError:
             raise Exception("Exception while loading pickle.")
             
-        write_predictions(predictor, instances, args.predictions_file)
+        write_predictions(predictor, instances, args.predictions_file, case)
     else:
         raise Exception("Unrecognized mode.")
 

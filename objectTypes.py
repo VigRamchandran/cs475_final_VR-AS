@@ -25,31 +25,43 @@ class Match:
 		self._barracks_status_dire = 0
 		self._label = 0
 
-	def get_feature_vector(self):
+	def get_feature_vector(self, case):
 		feature_vector = []
+		if case == 1:
 
-		for player in self._players:
-			feature_vector.append(player._hero)
-			feature_vector.append(player._item0)
-			feature_vector.append(player._item1)
-			feature_vector.append(player._item2)
-			feature_vector.append(player._item3)
-			feature_vector.append(player._item4)
-			feature_vector.append(player._item5)
+			for player in self._players:
+				feature_vector.append(player._hero)
+				feature_vector.append(player._item0)
+				feature_vector.append(player._item1)
+				feature_vector.append(player._item2)
+				feature_vector.append(player._item3)
+				feature_vector.append(player._item4)
+				feature_vector.append(player._item5)
 
-		tower_radiant = self.bit2arr(self._tower_status_radiant)
-		tower_dire = self.bit2arr(self._tower_status_dire)
-		barracks_radiant = self.bit2arr(self._barracks_status_radiant)
-		barracks_dire = self.bit2arr(self._barracks_status_dire)
+			tower_radiant = self.bit2arr(self._tower_status_radiant)
+			tower_dire = self.bit2arr(self._tower_status_dire)
+			barracks_radiant = self.bit2arr(self._barracks_status_radiant)
+			barracks_dire = self.bit2arr(self._barracks_status_dire)
 
-		for num in tower_radiant:
-			feature_vector.append(num)
-		for num in tower_dire:
-			feature_vector.append(num)
-		for num in barracks_dire:
-			feature_vector.append(num)
-		for num in barracks_radiant:
-			feature_vector.append(num)
+			for num in tower_radiant:
+				feature_vector.append(num)
+			for num in tower_dire:
+				feature_vector.append(num)
+			for num in barracks_dire:
+				feature_vector.append(num)
+			for num in barracks_radiant:
+				feature_vector.append(num)
+		elif case == 2:
+			for player in self._players:
+				feature_vector.append(player._hero)
+				feature_vector.append(player._item0)
+				feature_vector.append(player._item1)
+				feature_vector.append(player._item2)
+				feature_vector.append(player._item3)
+				feature_vector.append(player._item4)
+				feature_vector.append(player._item5)
+		else:
+			print "Invalid case"
 
 		return feature_vector
 
