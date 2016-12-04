@@ -32,14 +32,17 @@ def get_args():
     parser.add_argument("--model-file", type=str, required=True,
                         help="The name of the model file to create/load.")
     parser.add_argument("--predictions-file", type=str, help="The predictions file to create.")
-
+    parser.add_argument("--alg", type=str, help="desired algorithm.")
     args = parser.parse_args()
 
     return args
 
 
-def train(instances):
-    p = AdaBoost(2)
+def train(instances, alg):
+    if alg == "adaboost":
+        p = AdaBoost(2)
+    elif alg == "perceptron":
+        p = Perceptron()
     training_examples = instances[0]
     training_labels = instances[1]
     p = p.train(training_examples, training_labels)
@@ -71,7 +74,7 @@ def main():
         instances = load_instances()
 
         # Train the model.
-        predictor = train(instances)
+        predictor = train(instances,args.alg)
         try:
             with open(args.model_file, 'wb') as writer:
                 pickle.dump(predictor, writer)
@@ -82,7 +85,7 @@ def main():
             
     elif args.mode.lower() == "test":
         # Load the test data. Only want the feature vector this time.
-        instances = generate_test_data(10001, 200)
+        instances = generate_test_data(1001, 500)
 
         predictor = None
         # Load the model.
