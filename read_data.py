@@ -45,11 +45,3 @@ def load_data(number_of_training_matches=1000):
 		matches.append(match)
 
 	return matches
-
-def main():
-	matches = load_data(1000)
-	print matches[0]._match_id
-
-
-if __name__ == "__main__":
-	main()

@@ -26,5 +26,41 @@ class Match:
 		self._label = 0
 
 	def get_feature_vector(self):
-		return 1
+		feature_vector = []
+
+		for player in self._players:
+			feature_vector.append(player._hero)
+			feature_vector.append(player._item0)
+			feature_vector.append(player._item1)
+			feature_vector.append(player._item2)
+			feature_vector.append(player._item3)
+			feature_vector.append(player._item4)
+			feature_vector.append(player._item5)
+
+		tower_radiant = self.bit2arr(self._tower_status_radiant)
+		tower_dire = self.bit2arr(self._tower_status_dire)
+		barracks_radiant = self.bit2arr(self._barracks_status_radiant)
+		barracks_dire = self.bit2arr(self._barracks_status_dire)
+
+		for num in tower_radiant:
+			feature_vector.append(num)
+		for num in tower_dire:
+			feature_vector.append(num)
+		for num in barracks_dire:
+			feature_vector.append(num)
+		for num in barracks_radiant:
+			feature_vector.append(num)
+
+		return feature_vector
+
+	def get_label(self):
+		return int(self._label)
+
+	def bit2arr(self, bit_str):
+		arr = (",").join(bit_str).split(",")
+		for i in range(len(arr)):
+			arr[i] = int(arr[i])
+
+		return arr
+
 
