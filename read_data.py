@@ -20,7 +20,7 @@ def load_data(number_of_training_matches=1000):
 		for j in range(10):
 			player = Player()
 			player._match_id = player_data["match_id"][(10*i + j)]
-			player._hero_id = player_data["hero_id"][(10*i + j)]
+			player._hero = player_data["hero_id"][(10*i + j)]
 			if player_data["player_slot"][(10*i + j)] < 15:
 				player._team = 0
 			else:

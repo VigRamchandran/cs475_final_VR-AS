@@ -2,7 +2,7 @@
 
 from read_data import load_data
 from objectTypes import Player, Match
-
+from Perceptron import Perceptron
 
 def main():
 	matches = load_data(1000)
@@ -17,6 +17,11 @@ def main():
 		else:
 			label = 1
 		training_labels.append(label)
+
+	p = Perceptron()
+	p = p.train(training_examples, training_labels)
+
+
 
 if __name__ == "__main__":
 	main()
