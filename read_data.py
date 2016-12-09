@@ -2,9 +2,10 @@ import pandas as pd
 import objectTypes
 reload(objectTypes)
 from objectTypes import Match, Player
+import time
 
 
-def load_data(number_of_training_matches=1000):
+def load_data(number_of_training_matches=1):
     if number_of_training_matches > 50000:
         print "Data OVERLOADDDDDDDDD"
 
@@ -19,12 +20,19 @@ def load_data(number_of_training_matches=1000):
                                       "barracks_status_radiant", "barracks_status_dire", "radiant_win"])
 
     objectives_data = pd.read_csv(path + "objectives.csv",
-                                  usecols=["match_id", "key", "subtype", "team", "time", "value"])
+                                  usecols=["match_id", "player1", "key", "subtype", "team", "time", "value"])
+
+    purchase_data = pd.read_csv(path + "purchase_log.csv",
+                                usecols=["item_id", "time", "player_slot", "match_id"])
 
     matches = []
+
     for i in range(number_of_training_matches):
         # initialize players in a given match
         players = []
+        player_ids = [0, 1, 2, 3, 4, 128, 129, 130, 131, 132]
+
+        temp = purchase_data[purchase_data["match_id"] == i]
         for j in range(10):
             player = Player()
             player._match_id = player_data["match_id"][(10 * i + j)]
@@ -39,6 +47,9 @@ def load_data(number_of_training_matches=1000):
             player._item3 = player_data["item_3"][(10 * i + j)]
             player._item4 = player_data["item_4"][(10 * i + j)]
             player._item5 = player_data["item_5"][(10 * i + j)]
+
+            player._purchase = temp[temp["player_slot"] == player_ids[j]]
+
             players.append(player)
 
         # initialize matches
