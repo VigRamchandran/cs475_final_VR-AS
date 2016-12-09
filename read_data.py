@@ -5,7 +5,7 @@ from objectTypes import Match, Player
 import time
 
 
-def load_data(number_of_training_matches=1):
+def load_data(number_of_training_matches=10):
     if number_of_training_matches > 50000:
         print "Data OVERLOADDDDDDDDD"
 
@@ -115,3 +115,22 @@ def generate_test_data(start=1001, number_of_points=50):  # returns test Match o
         matches.append(match)
 
     return matches
+
+
+def create_train_file(matches):
+    target = open('dota.train', 'w')
+    for match in matches:
+        fv = match.get_feature_vector(player_feat=1, purchase_feat=1, obj_time=1, obj_end=0)
+        if match._label:
+            result = '1'
+        else:
+            result = '0'
+        target.write(result + ' ')
+
+        for i in range(len(fv)):
+            if fv[i] != 0:
+                target.write(str(i+1) + ':' + str(fv[i]) + ' ')
+
+        target.write("\n")
+
+    target.close()
