@@ -32,6 +32,9 @@ class Match:
         self._objectives = None
         self.num_heros = 113
         self.num_items = 265 + 1  # Extra 1 for zero pad, zero refers to no item
+        self.max_game_length = 7200  # Assume max game len 2 hrs
+        self.bin_size = 300  # Bin size of 5m
+        self.items = (46, 42)  # Track purchases of teleport scrolls, observer wards by player (may be better by team)
         # self._obj_feat = None
         # self._firstblood = 0  # 0 for radiant, 1 for dire
 
@@ -46,9 +49,8 @@ class Match:
 
             if purchase_feat:
                 purchases = player._purchase
-                tpscroll = 46
-                ward = 42
-                purchase_features = self.transform_purchases(purchases, (tpscroll, ward))
+                purchase_features = self.transform_purchases(purchases, self.items,
+                                                             max_time=self.max_game_length, bin_size=self.bin_size)
                 feature_vector.extend(purchase_features)
 
             # hero = [0] * num_heros
@@ -66,7 +68,7 @@ class Match:
             # feature_vector.extend(items)
 
         if obj_time:
-            objective_features, fb = self.transform_objectives()
+            objective_features, fb = self.transform_objectives(max_time=self.max_game_length, bin_size=self.bin_size)
             feature_vector.extend([fb])
             feature_vector.extend(objective_features)
 
@@ -162,9 +164,9 @@ class Match:
                     pass
             if row['subtype'] == 'CHAT_MESSAGE_FIRSTBLOOD':
                 if row['player1'] < 5:
-                    fb = 0
-                else:
                     fb = 1
+                else:
+                    fb = 0
 
         # self._obj_feat = features
         # self._firstblood = fb

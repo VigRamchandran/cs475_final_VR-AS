@@ -1,0 +1,35 @@
+Indexing for the Feature Vector
+All values are 0-indexed
+
+
+113 Heroes in the game
+266 Items in the game (0th item is an empty item slot)
+max_game_length = 7200s (2hrs) by default
+bin_size = 300s (5m) by default
+items = items we are interested in tracking purchases of over time (ie. NOT all 266 items in the game)
+
+Feature Vector Layout:
+[player_features, fb, objective_features]
+
+player_features is a vector of the form [p1, p2, p3, p4, p5… p10]
+px is the features for a single player of length 113 + 266 + (items*((max_game_length / bin_size) + 1))
+
+For px:
+	Indices i, 0:112 -> 1 if player has hero with ID i, 0 otherwise
+	Indices j, 113:378 -> 1 if player has end game item with ID j-113, 0 otherwise
+	Indices k, 379:428 -> Divided into ((max_game_length / bin_size)+1) ‘buckets’, each bucket is of length (items). See below for desc. of binning
+
+fb is a single int, 1 if radiant got first blood and 0 if dire got first blood
+objective_features is of length 6*(max_game_length / bin_size). Length 144
+
+
+
+Binning for objectives and purchases:
+By default, we assume the max game length is 2 hours (7200 seconds, max_game_length). We divide this game into 24 5-minute (bin_size) bins. 
+
+For objectives, each bin will have 6 elements: Radiant_towers_taken, radiant_barracks_taken, radiant_roshan_taken, dire_towers_taken, dire_barracks_taken, dire_roshan_taken. x_y_taken refers to x team taking y objective. Thus, our objectives feature vector is by default of length 24*6 = 144.
+
+For purchases, we specify item IDs whose purchases we are interested in tracking over time. By default, we look at teleport scrolls and observer wards (see paper for reasons why these items). We use the same max_game_length and bin_size as for objectives. However, at the beginning of every DOTA2 game there are 90 seconds for which players may not move, and may only purchase items or discuss game strategies. Thus, we add one additional bin that represents purchases for this pre-game time. Our purchases feature vector is then by default of length (24+1)*2 = 50.
+
+
+Each player feature vector is of length 113 + 266 + 50 = 429 by default. Firstblood is captured by a single int, and objectives are by default of length 144. Our total feature vector length per match is 429*10 + 1 + 133 = 4435. 
