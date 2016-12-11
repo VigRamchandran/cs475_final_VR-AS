@@ -55,7 +55,7 @@ class Match:
 
 
         if obj_time:
-            objective_features, fb = self.transform_objectives(max_time=self.max_game_length, bin_size=self.bin_size)
+            objective_features, fb = self.transform_objectives(max_time=900, bin_size=self.bin_size)
             feature_vector.extend([fb])
             feature_vector.extend(objective_features)
 

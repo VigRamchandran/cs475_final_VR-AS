@@ -68,6 +68,9 @@ def train(instances, alg):
         p = AdaBoost(2)
     elif alg == "perceptron":
         p = Perceptron()
+    else:
+        print 'Not an acceptable algorithm'
+        return
     training_examples = instances[0]
     training_labels = instances[1]
     p = p.train(instances)

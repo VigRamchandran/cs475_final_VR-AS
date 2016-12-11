@@ -1,11 +1,11 @@
 import pandas as pd
 import objectTypes
-# reload(objectTypes)
+reload(objectTypes)
 from objectTypes import Match, Player
 import time
 
 
-def load_data(number_of_training_matches=10):
+def load_data(number_of_training_matches=10000):
     if number_of_training_matches > 50000:
         print "Data OVERLOADDDDDDDDD"
 
