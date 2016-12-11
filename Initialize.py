@@ -5,7 +5,12 @@ from read_data import load_data, create_match_file, generate_test_data
 def create_label_file(filename, matches):
 	with open(filename,'w') as f:
 		for match in matches:
-			f.write(str(match._label) + "\n")
+			label = None
+			if match._label:
+				label = '1'
+			else:
+				label = '0'
+			f.write(label + "\n")
 	f.close()
 
 # Create training data

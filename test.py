@@ -5,12 +5,13 @@ import time
 def run_test(model_file, predictions_file, alg, train=False):
 	if train == True:
 		start1 = time.time()
-		os.system("python classify.py  --mode train --model-file {} --alg {}".format(model_file, alg))
+		os.system("python classify.py --data dota.train --mode train --model-file {} --alg {}".format(model_file, alg))
 		elapsed1 = time.time() - start1
+		q = 1
 	else:
 		elapsed1 = 0.00
-	os.system("python classify.py --mode test --model-file {} --predictions-file {}".format(model_file, predictions_file))
-	q = subprocess.check_output("python compute_accuracy.py label_file {}".format(predictions_file),shell=True)
+	os.system("python classify.py --data dota.dev --mode test --model-file {} --predictions-file {}".format(model_file, predictions_file))
+	q = subprocess.check_output("python compute_accuracy.py dota.label {}".format(predictions_file),shell=True)
 	return (q, elapsed1)
 
 def print_test():

@@ -41,6 +41,7 @@ class Perceptron:
 	def predict(self, instance):
 		w = self._w
 		x = instance.get_feature_vector()# instance feature vector. Will not have more features than training set.
+		product = 0
 		for index in x:
 			try:
 				product += w[index]*x[index]

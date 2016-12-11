@@ -34,11 +34,11 @@ def load_instances(filename):
                 try:
                     index = int(item.split(":")[0])
                 except ValueError:
-                    raise ValueError("Unable to convert index " + item.split(":")[0] + " to integer.")
+                    continue
                 try:
                     value = float(item.split(":")[1])
                 except ValueError:
-                    raise ValueError("Unable to convert value " + item.split(":")[1] + " to float.")
+                    continue
                 
                 if value != 0.0:
                     data_point.add_feature(index, value)
@@ -70,7 +70,7 @@ def train(instances, alg):
         p = Perceptron()
     training_examples = instances[0]
     training_labels = instances[1]
-    p = p.train(training_examples, training_labels)
+    p = p.train(instances)
     return p
 
 
@@ -87,7 +87,6 @@ def write_predictions(predictor, instances, predictions_file):
 
 def main():
     args = get_args()
-    case = 2
     if args.mode.lower() == "train":
         # Load the training data.
         instances = load_instances(args.data)
