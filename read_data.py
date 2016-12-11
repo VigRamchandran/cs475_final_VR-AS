@@ -72,9 +72,6 @@ def load_data(number_of_training_matches=10):
 
 
 def generate_test_data(start=1001, number_of_points=50):  # returns test Match objects
-    if number_of_training_matches > 50000:
-        print "Data OVERLOADDDDDDDDD"
-
     path = "dota-2-matches/"
 
     player_data = pd.read_csv(path + "players.csv",
@@ -93,7 +90,7 @@ def generate_test_data(start=1001, number_of_points=50):  # returns test Match o
 
     matches = []
 
-    for i in range(number_of_training_matches):
+    for i in range(number_of_points):
         # initialize players in a given match
         players = []
         player_ids = [0, 1, 2, 3, 4, 128, 129, 130, 131, 132]
@@ -132,7 +129,7 @@ def generate_test_data(start=1001, number_of_points=50):  # returns test Match o
 
         matches.append(match)
 
-    create_match_file('dota.dev',matches)
+    return matches
     print 'Finished Generating Test Data'
 
 
