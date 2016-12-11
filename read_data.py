@@ -1,6 +1,6 @@
 import pandas as pd
 import objectTypes
-reload(objectTypes)
+# reload(objectTypes)
 from objectTypes import Match, Player
 import time
 
@@ -72,6 +72,8 @@ def load_data(number_of_training_matches=10):
 
 
 def generate_test_data(start=1001, number_of_points=50):  # returns test Match objects
+    if number_of_training_matches > 50000:
+        print "Data OVERLOADDDDDDDDD"
 
     path = "dota-2-matches/"
 
@@ -83,10 +85,20 @@ def generate_test_data(start=1001, number_of_points=50):  # returns test Match o
                              usecols=["match_id", "tower_status_radiant", "tower_status_dire",
                                       "barracks_status_radiant", "barracks_status_dire", "radiant_win"])
 
+    objectives_data = pd.read_csv(path + "objectives.csv",
+                                  usecols=["match_id", "player1", "key", "subtype", "team", "time", "value"])
+
+    purchase_data = pd.read_csv(path + "purchase_log.csv",
+                                usecols=["item_id", "time", "player_slot", "match_id"])
+
     matches = []
-    for i in range(number_of_points):
+
+    for i in range(number_of_training_matches):
         # initialize players in a given match
         players = []
+        player_ids = [0, 1, 2, 3, 4, 128, 129, 130, 131, 132]
+
+        temp = purchase_data[purchase_data["match_id"] == i]
         for j in range(10):
             player = Player()
             player._match_id = player_data["match_id"][(start - 1 + 10 * i + j)]
@@ -101,24 +113,31 @@ def generate_test_data(start=1001, number_of_points=50):  # returns test Match o
             player._item3 = player_data["item_3"][(start - 1 + 10 * i + j)]
             player._item4 = player_data["item_4"][(start - 1 + 10 * i + j)]
             player._item5 = player_data["item_5"][(start - 1 + 10 * i + j)]
+
+            player._purchase = temp[temp["player_slot"] == player_ids[j]]
+
             players.append(player)
 
         # initialize matches
         match = Match(players)
-        match._match_id = match_data["match_id"][start - 1 + i]
-        match._tower_status_radiant = "{0:b}".format(match_data["tower_status_radiant"][start - 1 + i]).zfill(16)
-        match._tower_status_dire = "{0:b}".format(match_data["tower_status_dire"][start - 1 + i]).zfill(16)
-        match._barracks_status_radiant = "{0:b}".format(match_data["barracks_status_radiant"][start - 1 + i]).zfill(8)
-        match._barracks_status_dire = "{0:b}".format(match_data["barracks_status_dire"][start - 1 + i]).zfill(8)
-        match._label = match_data["radiant_win"][start - 1 + i]
+        match._match_id = match_data["match_id"][i]
+        match._tower_status_radiant = "{0:b}".format(match_data["tower_status_radiant"][i]).zfill(
+            16)  # convert int to bit string and zero pad
+        match._tower_status_dire = "{0:b}".format(match_data["tower_status_dire"][i]).zfill(16)
+        match._barracks_status_radiant = "{0:b}".format(match_data["barracks_status_radiant"][i]).zfill(8)
+        match._barracks_status_dire = "{0:b}".format(match_data["barracks_status_dire"][i]).zfill(8)
+        match._label = match_data["radiant_win"][i]
+
+        match._objectives = objectives_data.loc[objectives_data['match_id'] == i]  # Pass in a DataFrame
 
         matches.append(match)
 
-    return matches
+    create_match_file('dota.dev',matches)
+    print 'Finished Generating Test Data'
 
 
-def create_train_file(matches):
-    target = open('dota.train', 'w')
+def create_match_file(filename,matches):
+    target = open(filename, 'w')
     for match in matches:
         fv = match.get_feature_vector(player_feat=1, purchase_feat=1, obj_time=1, obj_end=0)
         if match._label:
@@ -134,3 +153,5 @@ def create_train_file(matches):
         target.write("\n")
 
     target.close()
+
+

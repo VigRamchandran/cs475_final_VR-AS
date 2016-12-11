@@ -53,19 +53,6 @@ class Match:
                                                              max_time=self.max_game_length, bin_size=self.bin_size)
                 feature_vector.extend(purchase_features)
 
-            # hero = [0] * num_heros
-            # hero[player._hero] = 1
-            # feature_vector.extend(hero)
-            #
-            # items = [0]*num_items
-            #
-            # items[player._item0] += 1
-            # items[player._item1] += 1
-            # items[player._item2] += 1
-            # items[player._item3] += 1
-            # items[player._item4] += 1
-            # items[player._item5] += 1
-            # feature_vector.extend(items)
 
         if obj_time:
             objective_features, fb = self.transform_objectives(max_time=self.max_game_length, bin_size=self.bin_size)
@@ -82,25 +69,6 @@ class Match:
             feature_vector.extend(tower_dire)
             feature_vector.extend(barracks_radiant)
             feature_vector.extend(barracks_dire)
-
-        # for num in tower_radiant:
-        #     feature_vector.append(num)
-        # for num in tower_dire:
-        #     feature_vector.append(num)
-        # for num in barracks_dire:
-        #     feature_vector.append(num)
-        # for num in barracks_radiant:
-        #     feature_vector.append(num)
-
-
-        # for player in self._players:
-        #     feature_vector.append(player._hero)
-        #     feature_vector.append(player._item0)
-        #     feature_vector.append(player._item1)
-        #     feature_vector.append(player._item2)
-        #     feature_vector.append(player._item3)
-        #     feature_vector.append(player._item4)
-        #     feature_vector.append(player._item5)
 
         return feature_vector
 
@@ -196,42 +164,15 @@ class Match:
 
         return arr
 
-
-        # try:
-        #     items[player._item0] += 1
-        # except IndexError:
-        #     print 'Out of bound: ', player._item0
-        #
-        # try:
-        #     items[player._item1] += 1
-        # except IndexError:
-        #     print 'Out of bound: ', player._item1
-        #
-        # try:
-        #     items[player._item2] += 1
-        # except IndexError:
-        #     print 'Out of bound: ', player._item2
-        #
-        # try:
-        #     items[player._item3] += 1
-        # except IndexError:
-        #     print 'Out of bound: ', player._item3
-        #
-        # try:
-        #     items[player._item4] += 1
-        # except IndexError:
-        #     print 'Out of bound: ', player._item4
-        #
-        # try:
-        #     items[player._item5] += 1
-        # except IndexError:
-        #     print 'Out of bound: ', player._item5
-
-
-
-        # feature_vector.append(player._item0)
-        # feature_vector.append(player._item1)
-        # feature_vector.append(player._item2)
-        # feature_vector.append(player._item3)
-        # feature_vector.append(player._item4)
-        # feature_vector.append(player._item5)
+class Data:
+    def __init__(self):
+        self._feature_vector = {}
+        self._label = None
+    def add_feature(self, index, value):
+        self._feature_vector[index] = value
+    def set_label(self, label):
+        self._label = int(label)
+    def get_label(self):
+        return self._label
+    def get_feature_vector(self):
+        return self._feature_vector
