@@ -15,6 +15,7 @@ class AdaBoostPerceptron():
 		self._training_labels = None
 		self._max_feature = None
 		self._n = None
+		self._tfinal = 0
 
 	def train(self, training_examples, training_labels):
 		self._max_feature = len(training_examples[0])
@@ -27,29 +28,29 @@ class AdaBoostPerceptron():
 
 		for t in range(self._boosting_iterations):
 			start = time.time()
-			print "On boosting iteration: {}".format(t) ,
 			examples = []
 			labels = []
-			for i in range(len(instances)/10): # Generate random samples for perceptron
-				m = randint(0, len(training_examples) - 1)
+			for i in range(self._n/10): # Generate random samples for perceptron
+				m = randint(0, self._n - 1)
 				examples.append(training_examples[m])
 				labels.append(training_labels[m])
 
 			p = NonSparsePerceptron(self._max_feature)
-			p = p.train(training_examples, training_labels)
+			p = p.train(examples, labels)
 			self._all.append(p)
 			
-			epsilon, best_h = compute_error()
+			epsilon, best_h = self.compute_error()
 			self._hts.append(best_h)
 			alpha = 0.5*math.log((1.0-epsilon)/epsilon)
 			self._alphas.append(alpha)
 
-			self._distribution = self.update_distribution()
-
-			print "\t {} (s)".format(elapsed-start)
+			self._distribution = self.update_distribution(t)
+			elapsed = time.time()
+			self._tfinal += 1
 		return self
 
-	def compute_error():
+	def compute_error(self):
+		error_h = []
 		for h in self._all:
 			error = 0
 			for i in range(self._n):
@@ -63,21 +64,20 @@ class AdaBoostPerceptron():
 					error += self._distribution[i]
 
 			error_h.append(error)
-		return np.min(error_h), np.argmin(error_h) # lowest error, best hypothesis for this round of training
+		return np.min(error_h), self._all[np.argmin(error_h)] # lowest error, best hypothesis for this round of training
 
-	def predict(self, testing_example):
-		test_feature_vector = testing_example
+	def predict(self, instance):
+		test_feature_vector = np.zeros(self._max_feature)
+		fv = instance.get_feature_vector()
+		for index in fv:
+			test_feature_vector[index - 1] = fv[index]
+
 		product = 0
 
 		for t in range(self._tfinal):
 			alpha_t = self._alphas[t]
-			j_t = self._j[t]
-			c_t = self._c[t]
 			h_t = self._hts[t]
-			if test_feature_vector[j_t] > c_t:
-				y_hat = h_t[0]
-			else:
-				y_hat = h_t[1]
+			y_hat = h_t.predict(test_feature_vector)
 
 			product += alpha_t*y_hat
 		if product >= 0:

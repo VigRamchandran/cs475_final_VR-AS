@@ -68,7 +68,7 @@ clf.fit(X, Y)
 
 testing = load_instances("dota.2.dev")
 X2, Y2 = instances_to_array(testing)
-with open("prediction", 'w') as f:
+with open("SVM.result", 'w') as f:
 	for i in X2:
 	    f.write(str(clf.predict([i])[0]) + "\n")
 f.close()

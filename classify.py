@@ -6,6 +6,7 @@ from Perceptron import Perceptron
 from AdaBoost import AdaBoost
 from AdaboostSparse import AdaboostSparse
 from AdaBoostPerceptron import AdaBoostPerceptron
+from KNN import KNN
 
 import os
 import argparse
@@ -97,6 +98,18 @@ def train(instances, alg):
     elif alg == "spadaboost":
         p = AdaboostSparse(2)
         p = p.train(instances)
+    elif alg == "adaboostp":
+        arr_instances = instances_to_array(instances)
+        training_examples = arr_instances[0]
+        training_labels = arr_instances[1]
+        p = AdaBoostPerceptron(20)
+        p = p.train(training_examples, training_labels)
+    elif alg == "knn":
+        arr_instances = instances_to_array(instances)
+        training_examples = arr_instances[0]
+        training_labels = arr_instances[1]
+        p = KNN(5)
+        p = p.train(training_examples, training_labels)
     else:
         print 'Not an acceptable algorithm'
         return
