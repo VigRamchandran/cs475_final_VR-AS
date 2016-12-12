@@ -4,6 +4,7 @@ from read_data import load_data, generate_test_data
 from objectTypes import Player, Match, Data
 from Perceptron import Perceptron
 from AdaBoost import AdaBoost
+from AdaboostSparse import AdaboostSparse
 
 import os
 import argparse
@@ -68,11 +69,11 @@ def train(instances, alg):
         p = AdaBoost(2)
     elif alg == "perceptron":
         p = Perceptron()
+    elif alg == "spadaboost":
+        p = AdaboostSparse(2)
     else:
         print 'Not an acceptable algorithm'
         return
-    training_examples = instances[0]
-    training_labels = instances[1]
     p = p.train(instances)
     return p
 

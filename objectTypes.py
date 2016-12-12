@@ -173,6 +173,14 @@ class Data:
     def set_label(self, label):
         self._label = int(label)
     def get_label(self):
-        return self._label
+        return int(self._label)
     def get_feature_vector(self):
         return self._feature_vector
+    def get_max_feature(self):
+        return max(list(self._feature_vector))
+    def get_value(self, index):
+        try:
+            val = self._feature_vector[index]
+        except KeyError:
+            val = 0
+        return val

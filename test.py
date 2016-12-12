@@ -5,27 +5,27 @@ import time
 def run_test(model_file, predictions_file, alg, train=False):
 	if train == True:
 		start1 = time.time()
-		os.system("python classify.py --data dota.train --mode train --model-file {} --alg {}".format(model_file, alg))
+		os.system("python classify.py --data dota.2.train --mode train --model-file {} --alg {}".format(model_file, alg))
 		elapsed1 = time.time() - start1
 		q = 1
 	else:
 		elapsed1 = 0.00
-	os.system("python classify.py --data dota.dev --mode test --model-file {} --predictions-file {}".format(model_file, predictions_file))
-	q = subprocess.check_output("python compute_accuracy.py dota.label {}".format(predictions_file),shell=True)
+	os.system("python classify.py --data dota.2.dev --mode test --model-file {} --predictions-file {}".format(model_file, predictions_file))
+	q = subprocess.check_output("python compute_accuracy.py dota.2.label {}".format(predictions_file),shell=True)
 	return (q, elapsed1)
 
 def print_test():
-	q = run_test("model_file", "predictions_file", "perceptron", train=True)
-	run_time = round(q[1],2)
-	str1 = " | "
-	str2 = str1.join(("test 1",str(q[0]), str(run_time) + "(s)")).replace("\n", "")
-	print str2
-
-	# q = run_test("model_file_boosting_2", "predictions_file", "adaboost", train=True)
+	# q = run_test("model_file", "predictions_file", "perceptron", train=True)
 	# run_time = round(q[1],2)
 	# str1 = " | "
-	# str2 = str1.join(("test 2",str(q[0]), str(run_time) + "(s)")).replace("\n", "")
+	# str2 = str1.join(("test 1",str(q[0]), str(run_time) + "(s)")).replace("\n", "")
 	# print str2
+
+	q = run_test("model_file_boosting_test", "predictions_file", "spadaboost", train=True)
+	run_time = round(q[1],2)
+	str1 = " | "
+	str2 = str1.join(("test 2",str(q[0]), str(run_time) + "(s)")).replace("\n", "")
+	print str2
 print_test()
 
 
