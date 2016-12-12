@@ -104,8 +104,8 @@ class AdaBoost():
 
 	def compute_hjc(self, j, c):
 		jth_column_of_training_examples = [fv[j] for fv in self._training_fvs]
-		votes_top = {1: 0, -1: 0}
-		votes_bottom = {1: 0, -1: 0}
+		votes_top = [0, 0]
+		votes_bottom = [0, 0]
 		for i in range(len(jth_column_of_training_examples)):
 			val = jth_column_of_training_examples[i]
 			if val > c:

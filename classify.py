@@ -10,6 +10,7 @@ import os
 import argparse
 import sys
 import pickle
+import numpy as np
 
 def load_instances(filename):
     instances = []
@@ -63,18 +64,42 @@ def get_args():
 
     return args
 
+def instances_to_array(instances):
+    curr_max = 1
+    for instance in instances:
+        if instance.get_max_feature() > curr_max:
+            curr_max = instance.get_max_feature()
+
+    examples = []
+    labels = []
+    for i in range(len(instances)):
+        fv_arr = np.zeros(curr_max)
+        fv = instances[i].get_feature_vector()
+        for index in fv:
+            fv_arr[index] = fv[index]
+        examples.append(fv_arr)
+        labels.append(instances[i].get_label())
+
+    return (examples, labels)
+
 
 def train(instances, alg):
     if alg == "adaboost":
+        arr_instances = instances_to_array(instances)
+        training_examples = arr_instances[0]
+        training_labels = arr_instances[1]
         p = AdaBoost(2)
+        p = p.train(training_examples, training_labels)
     elif alg == "perceptron":
         p = Perceptron()
+        p = p.train(instances)
     elif alg == "spadaboost":
         p = AdaboostSparse(2)
+        p = p.train(instances)
     else:
         print 'Not an acceptable algorithm'
         return
-    p = p.train(instances)
+    
     return p
 
 

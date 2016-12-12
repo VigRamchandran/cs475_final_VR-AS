@@ -21,7 +21,7 @@ def print_test():
 	# str2 = str1.join(("test 1",str(q[0]), str(run_time) + "(s)")).replace("\n", "")
 	# print str2
 
-	q = run_test("model_file_boosting_test", "predictions_file", "spadaboost", train=True)
+	q = run_test("model_file_boosting_test", "predictions_file", "adaboost", train=True)
 	run_time = round(q[1],2)
 	str1 = " | "
 	str2 = str1.join(("test 2",str(q[0]), str(run_time) + "(s)")).replace("\n", "")
