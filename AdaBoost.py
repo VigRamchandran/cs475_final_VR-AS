@@ -96,6 +96,7 @@ class AdaBoost():
 		j_dimensions = len(cutoffs)
 		num_cutoffs = len(cutoffs[0])
 		for j in range(j_dimensions):
+			print "\r{0} (%) completed".format(j*100.0/float(j_dimensions))
 			hjc_j = []
 			for c in range(num_cutoffs):
 				hjc_j.append(self.compute_hjc(j, cutoffs[j][c]))
