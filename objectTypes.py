@@ -72,6 +72,20 @@ class Match:
 
         return feature_vector
 
+    def get_clustering_vector(self):
+        features = [0]*self.num_heros
+        radiant_win = self._label  # 1 if radiant win, 0 if dire win
+        for player in self._players:
+            team = player._team  # 0 if radiant, 1 if dire
+            hero = player._hero
+
+            if team != radiant_win:  # not equal means that this player's team won.
+                features[hero] = 1
+            else:
+                features[hero] = -1
+
+        return features
+
     def transform_player(self, player):
         features = []
         hero = [0] * self.num_heros
