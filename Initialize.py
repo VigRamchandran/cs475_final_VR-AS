@@ -15,7 +15,7 @@ def create_label_file(filename, matches):
 	f.close()
 
 # Create training data
-matches = load_data(100)  # NOTE THAT I MADE THIS SMALLER!!
+matches = load_data(10000)  
 create_match_file('dota.cluster.train', matches, clustering=1)
 
 # Create dev/test data
