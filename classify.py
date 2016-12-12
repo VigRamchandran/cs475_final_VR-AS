@@ -76,7 +76,7 @@ def instances_to_array(instances):
         fv_arr = np.zeros(curr_max)
         fv = instances[i].get_feature_vector()
         for index in fv:
-            fv_arr[index] = fv[index]
+            fv_arr[index-1] = fv[index]
         examples.append(fv_arr)
         labels.append(instances[i].get_label())
 
