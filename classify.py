@@ -5,6 +5,7 @@ from objectTypes import Player, Match, Data
 from Perceptron import Perceptron
 from AdaBoost import AdaBoost
 from AdaboostSparse import AdaboostSparse
+from AdaBoostPerceptron import AdaBoostPerceptron
 
 import os
 import argparse
