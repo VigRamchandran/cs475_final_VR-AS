@@ -18,7 +18,7 @@ def run_test(name, model_file, predictions_file, alg, train=False):
 def run_SVM(name, train=True):
 	if train:
 		start = time.time()
-		os.system("python SVM.py")
+		os.system("python SVM.py {}".format(name))
 		elapsed = time.time() - start
 	else:
 		elapsed = 0.0
@@ -32,17 +32,17 @@ def print_test():
 	str2 = str1.join(("Perceptron",str(q[0]), str(run_time) + "(s)")).replace("\n", "")
 	print str2
 
-	# q = run_test("dota.2","model_file_adaboost", "adaboost.result", "adaboostp", train=False)
-	# run_time = round(q[1],2)
-	# str1 = " | "
-	# str2 = str1.join(("AdaBoost P",str(q[0]), str(run_time) + "(s)")).replace("\n", "")
-	# print str2
+	q = run_test("dota.25","model_file_adaboost", "adaboost.result", "adaboostp", train=True)
+	run_time = round(q[1],2)
+	str1 = " | "
+	str2 = str1.join(("AdaBoost P",str(q[0]), str(run_time) + "(s)")).replace("\n", "")
+	print str2
 
-	# q = run_SVM("dota.2", train=False)
-	# run_time = round(q[1],2)
-	# str1 = " | "
-	# str2 = str1.join(("SVM",str(q[0]), str(run_time) + "(s)")).replace("\n", "")
-	# print str2
+	q = run_SVM("dota.25.train", train=True)
+	run_time = round(q[1],2)
+	str1 = " | "
+	str2 = str1.join(("SVM",str(q[0]), str(run_time) + "(s)")).replace("\n", "")
+	print str2
 
 	# q = run_test("dota.cluster","model_file_knn", "knn.result", "knn", train=False)
 	# run_time = round(q[1],2)

@@ -3,6 +3,9 @@
 from sklearn import svm
 from objectTypes import Data
 import numpy as np
+import sys
+
+filename = sys.argv[1]
 
 def load_instances(filename):
     instances = []
@@ -42,7 +45,7 @@ def load_instances(filename):
 
     return instances
 
-instances = load_instances("dota.2.train")
+instances = load_instances(filename)
 
 def instances_to_array(instances):
     curr_max = 1
