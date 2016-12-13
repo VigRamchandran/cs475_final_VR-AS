@@ -98,6 +98,8 @@ class AdaBoostPerceptron():
 			x = self._training_fvs[i]
 			val = ht.predict(x)
 			y_i = self._training_labels[i]
+			if y_i == 0:
+				y_i = -1
 			distribution[i] = current_dist[i]*math.exp(-1.0*alpha*y_i*val)
 
 		Z = sum(distribution)
