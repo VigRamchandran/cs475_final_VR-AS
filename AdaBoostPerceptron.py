@@ -30,7 +30,7 @@ class AdaBoostPerceptron():
 			start = time.time()
 			examples = []
 			labels = []
-			for i in range(self._n/10): # Generate random samples for perceptron
+			for i in range(self._n/7): # Generate random samples for perceptron
 				m = randint(0, self._n - 1)
 				examples.append(training_examples[m])
 				labels.append(training_labels[m])
@@ -47,6 +47,8 @@ class AdaBoostPerceptron():
 			self._distribution = self.update_distribution(t)
 			elapsed = time.time()
 			self._tfinal += 1
+
+		self._all = None # clear out perceptrons to save space later
 		return self
 
 	def compute_error(self):
@@ -56,10 +58,10 @@ class AdaBoostPerceptron():
 			for i in range(self._n):
 				fv = self._training_fvs[i]
 				product = h.predict(fv)
-				if product >= 0:
-					label = 1
-				else:
+				if product == -1:
 					label = 0
+				else:
+					label = 1
 				if label != self._training_labels[i]:
 					error += self._distribution[i]
 
