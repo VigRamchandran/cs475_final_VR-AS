@@ -16,6 +16,7 @@ class AdaBoostPerceptron():
 		self._max_feature = None
 		self._n = None
 		self._tfinal = 0
+		self._L = None
 
 	def train(self, training_examples, training_labels):
 		self._max_feature = len(training_examples[0])
@@ -24,23 +25,28 @@ class AdaBoostPerceptron():
 		self._n = len(training_examples)
 		self._alphas = []
 		self._hts = []
+		self._all = []
 		self._distribution = (1.0/self._n)*np.ones(self._n, dtype=float)
+		self._L = 25 # Number of weak classifiers to be trained
 
-		for t in range(self._boosting_iterations):
-			start = time.time()
+		# Pre-train hypothesis classes
+
+		for l in range(self._L):
 			examples = []
 			labels = []
 			for i in range(self._n/7): # Generate random samples for perceptron
 				m = randint(0, self._n - 1)
 				examples.append(training_examples[m])
 				labels.append(training_labels[m])
-
 			p = NonSparsePerceptron(self._max_feature)
 			p = p.train(examples, labels)
 			self._all.append(p)
-			
+		print 'Done computing all hypothesis'
+
+
+		for t in range(self._boosting_iterations):
 			epsilon, best_h = self.compute_error()
-			self._hts.append(best_h)
+			self._hts.append(best_h.get_weight_vector())
 			alpha = 0.5*math.log((1.0-epsilon)/epsilon)
 			self._alphas.append(alpha)
 
@@ -79,7 +85,11 @@ class AdaBoostPerceptron():
 		for t in range(self._tfinal):
 			alpha_t = self._alphas[t]
 			h_t = self._hts[t]
-			y_hat = h_t.predict(test_feature_vector)
+			y_hat = h_t.dot(test_feature_vector)
+			if y_hat >= 0:
+				y_hat = 1
+			else:
+				y_hat -1
 
 			product += alpha_t*y_hat
 		if product >= 0:
@@ -96,7 +106,11 @@ class AdaBoostPerceptron():
 		alpha = self._alphas[t]
 		for i in range(self._n):
 			x = self._training_fvs[i]
-			val = ht.predict(x)
+			val = ht.dot(x)
+			if val >= 0:
+				val = 1
+			else:
+				val = -1
 			y_i = self._training_labels[i]
 			if y_i == 0:
 				y_i = -1
