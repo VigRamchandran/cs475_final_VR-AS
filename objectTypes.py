@@ -38,7 +38,7 @@ class Match:
         # self._obj_feat = None
         # self._firstblood = 0  # 0 for radiant, 1 for dire
 
-    def get_feature_vector(self, player_feat=1, purchase_feat=1, obj_time=1, obj_end=0):
+    def get_feature_vector(self, player_feat=1, purchase_feat=1, obj_time=1, seconds=7200, obj_end=0):
         feature_vector = []
 
 
@@ -55,7 +55,7 @@ class Match:
 
 
         if obj_time:
-            objective_features, fb = self.transform_objectives(max_time=900, bin_size=self.bin_size)
+            objective_features, fb = self.transform_objectives(max_time=seconds, bin_size=self.bin_size)
             feature_vector.extend([fb])
             feature_vector.extend(objective_features)
 

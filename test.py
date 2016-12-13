@@ -26,29 +26,29 @@ def run_SVM(name, train=True):
 	return (q, elapsed)
 
 def print_test():
-	q = run_test("dota.2","model_file_perceptron", "perceptron.result", "perceptron", train=False)
+	q = run_test("dota.25","model_file_perceptron", "perceptron.result", "perceptron", train=True)
 	run_time = round(q[1],2)
 	str1 = " | "
 	str2 = str1.join(("Perceptron",str(q[0]), str(run_time) + "(s)")).replace("\n", "")
 	print str2
 
-	q = run_test("dota.2","model_file_adaboost", "adaboost.result", "adaboostp", train=True)
-	run_time = round(q[1],2)
-	str1 = " | "
-	str2 = str1.join(("AdaBoost P",str(q[0]), str(run_time) + "(s)")).replace("\n", "")
-	print str2
+	# q = run_test("dota.2","model_file_adaboost", "adaboost.result", "adaboostp", train=False)
+	# run_time = round(q[1],2)
+	# str1 = " | "
+	# str2 = str1.join(("AdaBoost P",str(q[0]), str(run_time) + "(s)")).replace("\n", "")
+	# print str2
 
-	q = run_SVM("dota.2", train=False)
-	run_time = round(q[1],2)
-	str1 = " | "
-	str2 = str1.join(("SVM",str(q[0]), str(run_time) + "(s)")).replace("\n", "")
-	print str2
+	# q = run_SVM("dota.2", train=False)
+	# run_time = round(q[1],2)
+	# str1 = " | "
+	# str2 = str1.join(("SVM",str(q[0]), str(run_time) + "(s)")).replace("\n", "")
+	# print str2
 
-	q = run_test("dota.cluster","model_file_knn", "knn.result", "knn", train=False)
-	run_time = round(q[1],2)
-	str1 = " | "
-	str2 = str1.join(("KNN",str(q[0]), str(run_time) + "(s)")).replace("\n", "")
-	print str2
+	# q = run_test("dota.cluster","model_file_knn", "knn.result", "knn", train=False)
+	# run_time = round(q[1],2)
+	# str1 = " | "
+	# str2 = str1.join(("KNN",str(q[0]), str(run_time) + "(s)")).replace("\n", "")
+	# print str2
 print_test()
 
 

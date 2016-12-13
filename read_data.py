@@ -133,7 +133,7 @@ def generate_test_data(start=1001, number_of_points=50):  # returns test Match o
     print 'Finished Generating Test Data'
 
 
-def create_match_file(filename, matches, clustering=0):
+def create_match_file(filename, matches, seconds, clustering=0):
     target = open(filename, 'w')
     end = len(matches)
     counter = 0
@@ -142,7 +142,7 @@ def create_match_file(filename, matches, clustering=0):
         if clustering:
             fv = match.get_clustering_vector()
         else:
-            fv = match.get_feature_vector(player_feat=1, purchase_feat=1, obj_time=1, obj_end=0)
+            fv = match.get_feature_vector(player_feat=1, purchase_feat=1, obj_time=1, seconds=seconds, obj_end=0)
         if match._label:
             result = '1'
         else:
